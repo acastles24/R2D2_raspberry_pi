@@ -18,7 +18,7 @@ async play_animation(anim_num){
 
 async start_r2d2(){
     await this.set_stance(3);
-    await this.utils.wait(5000);
+    await this.utils.wait(2000);
 }
 async set_stance(num_legs){
     if (num_legs === 2) {
