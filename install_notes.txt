@@ -1,0 +1,31 @@
+# R2D2
+ 
+NPM installation commands:
+
+sudo apt-get remove nodejs
+
+sudo apt-get remove npm
+
+sudo apt-get update
+
+npm install @abandonware/bluetooth-hci-socket
+
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+
+sudo apt install -y nodejs
+
+npm init -y
+
+sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
+
+npm install @abandonware/bluetooth-hci-socket
+
+npm install @abandonware/noble
+
+Move bluetooth-hci-socket and noble to main node package folder
+
+sudo npm install -g typescript
+
+npm install -g ts-node
+
+npm install --save express @types/express body-parser

@@ -25,3 +25,5 @@ function connect_start(scanner, robot, bt_id, wait_time){
     console.log('Connection attemped failed.');
   })
 }
+
+module.exports.connect_start = connect_start;
