@@ -8,9 +8,9 @@ async function main() {
     if (r2d2_found){
         const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Scanner, Utils, Stance)
         await r2d2_initialized.start_r2d2()
-        await r2d2_found.rollTime(75, 0, 3000, [2])
-        await r2d2_found.rollTime(200, 90, 2000, [0])
-        await r2d2_found.rollTime(200, 270, 2000, [0])
+        await r2d2_found.rollTime(150, 0, 3000, [2])
+        await r2d2_found.rollTime(250, 90, 2000, [2])
+        await r2d2_found.rollTime(250, 270, 2000, [2])
     }
 }
 
