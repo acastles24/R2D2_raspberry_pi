@@ -6,7 +6,7 @@ const types = require('./node_modules/spherov2.js/dist/')
 async function main() {
     const r2d2_found = await connect_function.connect(Scanner, R2D2)
     if (r2d2_found){
-        const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Scanner, Utils, Stance)
+        const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Utils, Stance)
         await r2d2_initialized.start_r2d2()
         await r2d2_found.rollTime(150, 0, 3000, [2])
         await r2d2_found.rollTime(250, 90, 2000, [2])
