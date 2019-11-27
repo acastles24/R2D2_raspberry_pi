@@ -11,6 +11,9 @@ class r2d2Initialize{
         this.r2d2_found = r2d2_found
         this.utils = utils
         this.stance = stance
+        // todo: make variable
+        this.speed = 0
+        this.heading = 0
 }
 /**
  * Turns dome with pause after. 
