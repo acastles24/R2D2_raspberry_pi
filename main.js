@@ -2,10 +2,11 @@ const { Scanner, Stance, Utils, R2D2 } = require('spherov2.js');
 const functions = require('./r2d2_functions/functions')
 const connect_function = require('./utilities/connect')
 const mqtt_connect = require('./utilities/mqtt_connection')
-const mqtt = require('mqtt')
+
 
 async function main() {
     const r2d2_found = await connect_function.connect(Scanner, R2D2)
+    mqtt_connect.mqtt_connect('192.168.1.13')
     if (r2d2_found){
         const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Utils, Stance)
         await r2d2_initialized.start_r2d2()
