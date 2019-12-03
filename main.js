@@ -6,6 +6,8 @@ const mqtt_connect = require('./utilities/mqtt_connection')
 
 async function main() {
     const r2d2_found = await connect_function.connect(Scanner, R2D2)
+    // todo: static ip
+    // todo: without wifi?
     mqtt_connect.mqtt_connect('192.168.1.13')
     // if (r2d2_found){
     //     const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Utils, Stance)

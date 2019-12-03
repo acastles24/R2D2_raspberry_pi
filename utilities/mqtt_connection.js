@@ -17,20 +17,23 @@ exports.mqtt_connect = function(ip_address) {
     })
 }
 
-function handleManualControlRequest(message, r2d2_initialized) {
-    // let manualRequest =
-    parseManualControlRequest(message)
-    // let velX = manualRequest.velX
-    // let velY = manualRequest.velY
-    // let ang = manualRequest.ang
+async function handleManualControlRequest(message, r2d2_initialized) {
+    let manualRequest = parseManualControlRequest(message)
+    let speed = convertVelocitytoMaxMinBounds(manualRequest.velX, manualRequest.velY)
+    let heading = convertRadtoHeading(manualRequest.ang)
+    console.log(speed + ' ' + heading)
+    // todo: what latency?
+    await r2d2_initialized.manualRoll(speed, heading, 100, [2])
 }
 
 function convertVelocitytoMaxMinBounds(xvel, yvel){
     vmag = Math.sqrt(Math.pow(xvel, 2) + Math.pow(yvel, 2))
+    // todo: round
     return vmag*2 + 150
 }
 
-function convertRadtoDeg(angle){
+function convertRadtoHeading(angle){
+    // todo: round
     if (angle <= 0) {
         return angle*-180/3.14
     }
@@ -45,9 +48,9 @@ function parseManualControlRequest(message){
     let velY = messageString.split("velY = ")[1].split(" ")[0]
     let ang = messageString.split("ang = ")[1]
     console.log(velX + velY + ang)
-    // return{
-    //     velX: velX,
-    //     velY: velY,
-    //     ang: ang,
-    // }
+    return{
+        velX: velX,
+        velY: velY,
+        ang: ang,
+    }
 }
