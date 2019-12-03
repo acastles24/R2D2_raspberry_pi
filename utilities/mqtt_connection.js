@@ -1,35 +1,41 @@
 const mqtt = require('mqtt')
 
-exports.mqtt_connect = function(ip_address) {
-    console.log('Connecting to ' + ip_address)
-    const client = mqtt.connect('mqtt://' + ip_address)
-    console.log('Connected!')
-    client.on('connect', () => {
-        client.subscribe('rpi/manualControl')
-      })
-
-    client.on('message', (topic, message) => {
-    console.log('received message %s %s', topic, message)
-    switch (topic) {
-        case 'rpi/manualControl':
-        return handleManualControlRequest(message)
-    }
-    })
+class MQTTConnection{
+    constructor(ip_address, r2d2_initialized){
+        console.log('Connecting to ' + ip_address)
+        this.client = mqtt.connect('mqtt://' + ip_address)
+        console.log('Connected!')
+        this.r2d2_initialized = r2d2_initialized
+        // todo: refactor
+        this.client.on('connect', () => {
+            this.client.subscribe('rpi/manualControl')
+          })
+    
+        this.client.on('message', (topic, message) => {
+        console.log('received message %s %s', topic, message)
+        switch (topic) {
+            case 'rpi/manualControl':
+            return handleManualControlRequest(message, this.r2d2_initialized)
+        }
+        })
+}
 }
 
-async function handleManualControlRequest(message, r2d2_initialized) {
+exports.MQTTConnection = MQTTConnection
+
+function handleManualControlRequest(message, r2d2_initialized) {
     let manualRequest = parseManualControlRequest(message)
     let speed = convertVelocitytoMaxMinBounds(manualRequest.velX, manualRequest.velY)
     let heading = convertRadtoHeading(manualRequest.ang)
     console.log(speed + ' ' + heading)
     // todo: what latency?
-    await r2d2_initialized.manualRoll(speed, heading, 100, [2])
+    r2d2_initialized.manualRoll(speed, heading, [2])
 }
 
 function convertVelocitytoMaxMinBounds(xvel, yvel){
     vmag = Math.sqrt(Math.pow(xvel, 2) + Math.pow(yvel, 2))
     // todo: round
-    return vmag*2 + 150
+    return vmag/70.71*100 + 150
 }
 
 function convertRadtoHeading(angle){

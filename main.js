@@ -8,15 +8,16 @@ async function main() {
     const r2d2_found = await connect_function.connect(Scanner, R2D2)
     // todo: static ip
     // todo: without wifi?
-    mqtt_connect.mqtt_connect('192.168.1.13')
-    // if (r2d2_found){
-    //     const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Utils, Stance)
+    
+    if (r2d2_found){
+        const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Utils, Stance)
+        let mqtt_connection = new mqtt_connect.MQTTConnection('192.168.1.13', r2d2_initialized)
     //     await r2d2_initialized.start_r2d2()
     //     await r2d2_initialized.manualRoll(150, 0, 3000, [2])
     //     await r2d2_initialized.manualRoll(250, 90, 2000, [2])
     //     await r2d2_initialized.manualRoll(250, 270, 2000, [2])
     //     await r2d2_initialized.set_stance(2)
-    // }
+    }
 }
 
 main()

@@ -11,9 +11,6 @@ class r2d2Initialize{
         this.r2d2_found = r2d2_found
         this.utils = utils
         this.stance = stance
-        // todo: make variable
-        this.speed = 0
-        this.heading = 0
 }
 /**
  * Turns dome with pause after. 
@@ -52,8 +49,10 @@ async set_stance(num_legs){
     
 }
 
-async manualRoll(speed, heading, time, flags){
-    await this.r2d2_found.rollTime(speed, heading, time, flags)
+manualRoll(speed, heading, time, flags){
+    // await this.r2d2_found.rollTime(speed, heading, time, flags)
+    console.log('ROLLING')
+    this.r2d2_found.roll(speed, heading, flags)
 }
 }
 
