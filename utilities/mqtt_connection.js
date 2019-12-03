@@ -21,8 +21,8 @@ exports.mqtt_connect = function(mqtt, ip_address) {
 }
 
 function handleFWDRequest(message, r2d2) {
-    if message == 'fwd'{
-        // todo: vary speed
-        r2d2.speed += 200
-    }
+    // // if message == 'fwd'{
+    //     // todo: vary speed
+    //     r2d2.speed += 200
+    // // }
 }

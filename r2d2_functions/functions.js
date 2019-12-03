@@ -34,7 +34,7 @@ async play_animation(anim_num){
 /**Start up sequence after connection. */
 async start_r2d2(){
     await this.set_stance(3);
-    await this.utils.wait(2000);
+    await this.utils.wait(4000);
 }
 /**
  * **Changes stance of R2-D2 based on number of legs, then pause. 
@@ -51,8 +51,11 @@ async set_stance(num_legs){
     await this.utils.wait(2000);
     
 }
-}
 
+async manualRoll(speed, heading, time, flags){
+    await this.r2d2_found.rollTime(speed, heading, time, flags)
+}
+}
 
 
 exports.r2d2Initialize = r2d2Initialize
