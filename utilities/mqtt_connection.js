@@ -29,13 +29,19 @@ function handleManualControlRequest(message, r2d2_initialized) {
     let heading = convertRadtoHeading(manualRequest.ang)
     console.log(speed + ' ' + heading)
     // todo: what latency?
-    r2d2_initialized.manualRoll(speed, heading, [2])
+    // r2d2_initialized.manualRoll(speed, heading, [2])
 }
 
 function convertVelocitytoMaxMinBounds(xvel, yvel){
     vmag = Math.sqrt(Math.pow(xvel, 2) + Math.pow(yvel, 2))
     // todo: round
-    return vmag/70.71*100 + 150
+    if (vmag === 0){
+        return 0
+    }
+    else {
+        return vmag/70.71*100 + 150
+    }
+    
 }
 
 function convertRadtoHeading(angle){
