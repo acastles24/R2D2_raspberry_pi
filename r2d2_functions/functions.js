@@ -49,7 +49,7 @@ async set_stance(num_legs){
     
 }
 
-manualRoll(speed, heading, time, flags){
+manualRoll(speed, heading, flags){
     console.log('ROLLING')
     this.r2d2_found.roll(speed, heading, flags)
 }

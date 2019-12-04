@@ -23,13 +23,12 @@ class MQTTConnection{
 
 exports.MQTTConnection = MQTTConnection
 
-function handleManualControlRequest(message, r2d2_initialized) {
+async function handleManualControlRequest(message, r2d2_initialized) {
     let manualRequest = parseManualControlRequest(message)
     let speed = convertVelocitytoMaxMinBounds(manualRequest.velX, manualRequest.velY)
     let heading = convertRadtoHeading(manualRequest.ang)
     console.log(speed + ' ' + heading)
-    // todo: what latency?
-    // r2d2_initialized.manualRoll(speed, heading, [2])
+    await r2d2_initialized.manualRoll(speed, heading, [2])
 }
 
 function convertVelocitytoMaxMinBounds(xvel, yvel){
