@@ -1,18 +1,34 @@
 const { Scanner, Stance, Utils, R2D2 } = require('spherov2.js');
 const functions = require('./r2d2_functions/functions')
-const connect_function = require('./utilities/connect')
-const mqtt_connect = require('./utilities/mqtt_connection')
+
+class CreateRobot{
+    constructor(){
+        r2d2_connected = this.connect(Scanner, R2D2);
+        r2d2_functions = new functions.r2d2Functions(r2d2_connected, Utils, Stance)
+
+    }
+
+
+    /**
+ * Connects to R2-D2
+ * @param {Scanner from spherov2} scanner 
+ * @param {R2-D2 type from spherov2} scanner 
+ * @returns {Connected R2-D2 instance}
+ * todo: retry if connection failed
+ */
+async connect(scanner, R2D2) {
+    const r2d2_connected = await scanner.find(R2D2.advertisement);
+    return r2d2_connected
+  }
+}
 
 
 async function main() {
-    const r2d2_found = await connect_function.connect(Scanner, R2D2)
+    r2d2 = CreateRobot()
     // todo: static ip
     // todo: without wifi?
-    
-    if (r2d2_found){
-        const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Utils, Stance)
-        let mqtt_connection = new mqtt_connect.MQTTConnection('192.168.1.13', r2d2_initialized)
-    }
+    const r2d2_initialized = new functions.r2d2Initialize(r2d2_found, Utils, Stance)
+    let mqtt_connection = new mqtt_connect.MQTTConnection('192.168.1.13', r2d2_initialized)
 }
 
 main()

@@ -7,15 +7,15 @@ class MQTTConnection{
         console.log('Connected!')
         this.r2d2_initialized = r2d2_initialized
         // todo: refactor
-        this.client.on('connect', () => {
-            this.client.subscribe('rpi/manualControl')
-          })
+        // this.client.on('connect', () => {
+        //     this.client.subscribe('rpi/manualControl')
+        //   })
     
         this.client.on('message', (topic, message) => {
         console.log('received message %s %s', topic, message)
         switch (topic) {
             case 'rpi/manualControl':
-            return handleManualControlRequest(message, this.r2d2_initialized)
+                return handleManualControlRequest(message, this.r2d2_initialized)
         }
         })
 }

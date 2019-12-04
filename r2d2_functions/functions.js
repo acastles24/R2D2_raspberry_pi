@@ -1,6 +1,6 @@
 /**Class for R2-D2 functions after robot is found via Bluetooth.*/
 
-class r2d2Initialize{
+class r2d2Functions{
     /**
      * 
      * @param {R2D2 robot found} r2d2_found 
@@ -56,4 +56,4 @@ manualRoll(speed, heading, flags){
 }
 
 
-exports.r2d2Initialize = r2d2Initialize
+exports.r2d2Functions = r2d2Functions
