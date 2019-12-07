@@ -1,5 +1,4 @@
 const mqtt = require('mqtt')
-const {handleManualControlRequest} = require('../r2d2_functions/move_functions')
 
 class MQTTConnection{
     constructor(ip_address, driveModeExecuteDict){
@@ -8,21 +7,20 @@ class MQTTConnection{
         console.log('Connected!')
 
         this.client.on('connect', () => {
-            this.client.subscribe('rpi/chooseDriveMethod')
-            subscribeToMethodsinDict(driveModeExecuteDict)
+            subscribeToMethodsinDict(driveModeExecuteDict, this.client)
           })
         
         this.client.on('message', (topic, message) => {
         console.log('received message %s %s', topic, message)
-        driveModeExecuteDict.topic.execute(message)
+        driveModeExecuteDict[topic].execute(message)
         
         })
 }
 }
 
-function subscribeToMethodsinDict(dict_){
+function subscribeToMethodsinDict(dict_, client){
     for (method in dict_){
-        this.client.subscribe(method)
+        client.subscribe(method)
     }
 }
 

@@ -18,14 +18,17 @@ async function connect(scanner, R2D2) {
 
 async function main() {
     r2d2_connected = await connect(Scanner, R2D2);
-    r2d2_functions = new r2d2Functions(this.r2d2_connected, Utils, Stance)
+    r2d2_functions = new r2d2Functions(r2d2_connected, Utils, Stance)
+    await r2d2_functions.resetHeading()
+    await r2d2_functions.set_stance(3)
 
-    ManualControlInitialized = new ManualControl(r2d2Functions)
+    ManualControlInitialized = new ManualControl(r2d2_functions)
 
-    driveModeExecuteDict = {
+    const driveModeExecuteDict = {
         'rpi/manualControl': ManualControlInitialized
     }
-    client = new MQTTConnection('192.168.1.13', driveModeExecuteDict)
+
+    client_connected = new MQTTConnection('192.168.1.13', driveModeExecuteDict)
     
     // todo: static ip
     // todo: without wifi?

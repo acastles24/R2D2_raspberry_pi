@@ -49,10 +49,15 @@ async set_stance(num_legs){
     
 }
 
-manualRoll(speed, heading, flags){
+async manualRoll(speed, heading, flags){
     console.log('ROLLING')
-    this.r2d2_found.roll(speed, heading, flags)
+    await this.r2d2_found.roll(speed, heading, flags)
 }
+
+async resetHeading(){
+    await this.r2d2_found.resetHeading()
+}
+
 }
 
 

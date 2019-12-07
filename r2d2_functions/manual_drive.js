@@ -18,13 +18,12 @@ class ManualControl{
  * @param {float} yvel : y component of velocity
  */
 static convertVelocityCompToMag(xvel, yvel){
-    vmag = Math.sqrt(Math.pow(xvel, 2) + Math.pow(yvel, 2))
+    let vmag = Math.sqrt(Math.pow(xvel, 2) + Math.pow(yvel, 2))
     if (vmag === 0){
         return 0
     }
     else {
-        // return (vmag/Math.SQRT2*100 + 150).toString(2)
-        return (vmag/70 + 150).toString(2)
+        return (vmag/Math.SQRT2*100 + 150)
     }
     
 }
@@ -39,10 +38,10 @@ static convertVelocityCompToMag(xvel, yvel){
  */
 static convertJoystickRadtoHeading(angle){
     if (angle <= 0) {
-        return (angle*-180/3.14).toString(2)
+        return (angle*(-180/3.14))
     }
     else {
-        return (360-angle*180/3.14).toString(2)
+        return (360-angle*180/3.14)
     }
 }
 
@@ -51,7 +50,7 @@ static convertJoystickRadtoHeading(angle){
  * @param {string} message : ... velX = [float] velY = [float] ang = [float]
  */
 static parseManualControlMessage(message){
-    messageString = message.toString()
+    let messageString = message.toString()
     let velX = messageString.split("velX = ")[1].split(" ")[0]
     let velY = messageString.split("velY = ")[1].split(" ")[0]
     let ang = messageString.split("ang = ")[1]
