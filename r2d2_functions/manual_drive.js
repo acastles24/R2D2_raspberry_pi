@@ -1,18 +1,23 @@
-async function handleManualControlRequest(message, r2d2_initialized) {
-    let manualRequest = parseManualControlMessage(message)
-    let speed = convertVelocityCompToMag(manualRequest.velX, manualRequest.velY)
-    let heading = convertJoystickRadtoHeading(manualRequest.ang)
-    console.log(speed + ' ' + heading)
-    await r2d2_initialized.manualRoll(speed, heading, [2])
-}
+class ManualControl{
+    constructor(r2d2_functions){
+        this.r2d2_functions = r2d2_functions
+    }
 
-/**
+    async execute(message){
+        let manualRequest = ManualControl.parseManualControlMessage(message)
+        let speed = ManualControl.convertVelocityCompToMag(manualRequest.velX, manualRequest.velY)
+        let heading = ManualControl.convertJoystickRadtoHeading(manualRequest.ang)
+        console.log(speed + ' ' + heading)
+        await this.r2d2_functions.manualRoll(speed, heading, [2])
+    }
+
+    /**
  * Calculates velocity magnitude from received x and y components.
  * Rounds output to second decimal.
  * @param {float} xvel : x component of velocity
  * @param {float} yvel : y component of velocity
  */
-function convertVelocityCompToMag(xvel, yvel){
+static convertVelocityCompToMag(xvel, yvel){
     vmag = Math.sqrt(Math.pow(xvel, 2) + Math.pow(yvel, 2))
     if (vmag === 0){
         return 0
@@ -32,7 +37,7 @@ function convertVelocityCompToMag(xvel, yvel){
  * 1.57 rad -> 270 deg
  * @param {float} angle : angle of joystick in radians.
  */
-function convertJoystickRadtoHeading(angle){
+static convertJoystickRadtoHeading(angle){
     if (angle <= 0) {
         return (angle*-180/3.14).toString(2)
     }
@@ -45,7 +50,7 @@ function convertJoystickRadtoHeading(angle){
  * Parses manual control message from app into velocity X/Y and angular components
  * @param {string} message : ... velX = [float] velY = [float] ang = [float]
  */
-function parseManualControlMessage(message){
+static parseManualControlMessage(message){
     messageString = message.toString()
     let velX = messageString.split("velX = ")[1].split(" ")[0]
     let velY = messageString.split("velY = ")[1].split(" ")[0]
@@ -56,5 +61,6 @@ function parseManualControlMessage(message){
         ang: ang,
     }
 }
+}
 
-module.exports.handleManualControlRequest = handleManualControlRequest
+exports.ManualControl = ManualControl

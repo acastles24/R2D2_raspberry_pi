@@ -1,23 +1,7 @@
-const { Scanner, Stance, Utils, R2D2 } = require('spherov2.js');
+const { Scanner, Stance, Utils, R2D2 } = require('spherov2.js')
 const {r2d2Functions} = require('./r2d2_functions/move_functions')
 const {MQTTConnection} = require('./utilities/mqtt_connection')
-
-class CreateRobot{
-    constructor(){
-        r2d2_connected = connect(Scanner, R2D2);
-        this.r2d2_functions = new r2d2Functions(r2d2_connected, Utils, Stance)
-        this.client = new MQTTConnection('192.168.1.13', r2d2_functions)
-}
-}
-
-function subscribeDriveMethod(topic) {
-    this.client.subscribe(topic)
-}
-
-function unsubscribeDriveMethod(topic){
-    this.client.unsubscribe(topic)
-}
-
+const {ManualControl} = require('./r2d2_functions/manual_drive')
 
 /**
  * Connects to R2-D2
@@ -32,21 +16,20 @@ async function connect(scanner, R2D2) {
 }
 
 
-function main() {
-    r2d2 = CreateRobot()
+async function main() {
+    r2d2_connected = await connect(Scanner, R2D2);
+    r2d2_functions = new r2d2Functions(this.r2d2_connected, Utils, Stance)
+
+    ManualControlInitialized = new ManualControl(r2d2Functions)
+
+    driveModeExecuteDict = {
+        'rpi/manualControl': ManualControlInitialized
+    }
+    client = new MQTTConnection('192.168.1.13', driveModeExecuteDict)
+    
     // todo: static ip
     // todo: without wifi?
     // todo: incorporate into app
-    current_drive_method = null
-    drive_method_received = this.r2d2.drive_method
-    while (true){
-        if (current_drive_method !== drive_method_received){
-            if (current_drive_method){
-                unsubscribeDriveMethod(current_drive_method)
-            }
-            subscribeDriveMethod(drive_method_received)
-        }      
-    }
 }
 
 main()
