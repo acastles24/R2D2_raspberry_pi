@@ -23,7 +23,7 @@ static convertVelocityCompToMag(xvel, yvel){
         return 0
     }
     else {
-        return (vmag/Math.SQRT2*100 + 150)
+        return (vmag/Math.SQRT2*200 + 50)
     }
     
 }
