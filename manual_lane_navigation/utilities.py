@@ -38,11 +38,11 @@ def line_segments(edges):
 
 def average_lines(frame, line_segments):
     lanes = []
-    if not line_segments:
+    if len(line_segments) == 0:
         print('No lanes detected')
         return lanes
     
-    height, width = frame.shape
+    height, width, _ = frame.shape
     left_lanes = []
     right_lanes = []
 
@@ -53,19 +53,23 @@ def average_lines(frame, line_segments):
     right_boundary = width * lane_detection_boundary
 
     for segment in line_segments:
-        for x1, y1, x2, y2 in line_segments:
+        for x1, y1, x2, y2 in segment:
             # disregard vertical line segments
             if x1 == x2:
                 continue
-            fit = np.polyfit((x1, y1), (x2, y2))
+            fit = np.polyfit((x1, x2), (y1, y2), 1)
             slope = fit[0]
+            print(slope)
             intercept = fit[1]
             if slope < 0:
                 if x1 < left_boundary and x2 < left_boundary:
                     left_lanes.append((slope, intercept))
-                else:
-                    if x1 > right_boundary and x2 > right_boundary:
-                        right_lanes.append((slope, intercept))
+            else:
+                if x1 > right_boundary and x2 > right_boundary:
+                    right_lanes.append((slope, intercept))
+
+    print(left_lanes)
+    print(right_lanes)
 
     left_lane_average = np.average(left_lanes, axis=0)
     if len(left_lanes) > 0:
@@ -80,7 +84,7 @@ def average_lines(frame, line_segments):
 
 
 def generate_points(frame, line):
-    height, width = frame.shape
+    height, width, _ = frame.shape
     slope, intercept = line
     y1 = height
     y2 = int(y1 / 2)
