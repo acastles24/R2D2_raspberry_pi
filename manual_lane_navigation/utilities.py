@@ -66,5 +66,26 @@ def average_lines(frame, line_segments):
                 else:
                     if x1 > right_boundary and x2 > right_boundary:
                         right_lanes.append((slope, intercept))
+
     left_lane_average = np.average(left_lanes, axis=0)
+    if len(left_lanes) > 0:
+        lanes.append(generate_points(frame, left_lane_average))
+
+    right_lane_average = np.average(right_lanes, axis=0)
     
+    if len(right_lanes) > 0:
+        lanes.append(generate_points(frame, right_lane_average))
+
+    return lanes
+
+
+def generate_points(frame, line):
+    height, width = frame.shape
+    slope, intercept = line
+    y1 = height
+    y2 = int(y1 / 2)
+
+    x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
+    x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
+    return [[x1, y1, x2, y2]]    
+
