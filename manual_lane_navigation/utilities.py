@@ -1,4 +1,5 @@
 import cv2
+import math
 import numpy as np
 
 def BGR_to_HSV(frame):
@@ -97,3 +98,43 @@ def display_lanes(frame, lanes, color=(0, 255, 0)):
                 cv2.line(lane_image, (x1, y1), (x2, y2), color, 4)
     lane_image = cv2.addWeighted(frame, 0.8, lane_image, 1, 1)
     return lane_image
+
+def calc_steering_angle(frame, lanes):
+    if not lanes:
+        return -1000
+
+    height, width, _ = frame.shape
+
+    if len(lanes) == 1:
+        print('One lane detected')
+        x1, _, x2, _ = lanes[0][0]
+        x_offset = x2 - x1
+    else:
+        print('Two lanes detected')
+        _, _, left_x2, _ = lanes[0][0]
+        _, _, right_x2, _ = lanes[1][0]
+        camera_offset = 0
+        middle = int(width/2 * (1 + camera_offset))
+        x_offset = (left_x2 + right_x2) / 2 - middle
+
+    y_offset = int(height / 2)
+
+    angle_rad = math.atan(x_offset / y_offset)
+    angle_deg = int(angle_rad * 180 / math.pi)
+
+    return angle_rad
+
+def stabilize_steering(current, new, num_lanes, max_dev_two_lanes = 5, max_def_one_lane=1):
+    if num_lanes == 2:
+        max_dev = max_dev_two_lanes
+    else:
+        max_dev = max_dev_one_lane
+
+    dev = new - current
+
+    if abs(dev) > max_dev:
+        stabilized_angle = current + max_dev
+    else:
+        stabilized_angle = new
+    
+    return stabilized_angle
