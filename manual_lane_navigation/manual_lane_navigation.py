@@ -1,5 +1,5 @@
 import cv2
-from utilities import BGR_to_HSV, blue_mask, detect_edges, crop_frame, line_segments, average_lines
+from find_lane_utilities import BGR_to_HSV, blue_mask, detect_edges, crop_frame, line_segments, average_lines, display_lanes
 
 def detect_lanes(frame_raw):
     frame_hsv = BGR_to_HSV(frame_raw)
@@ -14,16 +14,16 @@ def detect_lanes(frame_raw):
 
     lanes = average_lines(frame_raw, lines_detected)
 
-    return lanes
+    lane_image = display_lanes(frame_raw, lanes)
+
+    return lane_image
 
 
 frame_raw = cv2.imread('/home/pi/test_image.jpg')
 
 lanes = detect_lanes(frame_raw)
 
-print(lanes)
+cv2.imshow('lanes', lanes)
 
-# cv2.imshow('blue_mask', edges_cropped)
-
-# cv2.waitKey(0) # waits until a key is pressed
-# cv2.destroyAllWindows() # destroys the window showing image
+cv2.waitKey(0) # waits until a key is pressed
+cv2.destroyAllWindows() # destroys the window showing image

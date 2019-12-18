@@ -59,7 +59,6 @@ def average_lines(frame, line_segments):
                 continue
             fit = np.polyfit((x1, x2), (y1, y2), 1)
             slope = fit[0]
-            print(slope)
             intercept = fit[1]
             if slope < 0:
                 if x1 < left_boundary and x2 < left_boundary:
@@ -67,9 +66,6 @@ def average_lines(frame, line_segments):
             else:
                 if x1 > right_boundary and x2 > right_boundary:
                     right_lanes.append((slope, intercept))
-
-    print(left_lanes)
-    print(right_lanes)
 
     left_lane_average = np.average(left_lanes, axis=0)
     if len(left_lanes) > 0:
@@ -93,3 +89,11 @@ def generate_points(frame, line):
     x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
     return [[x1, y1, x2, y2]]    
 
+def display_lanes(frame, lanes, color=(0, 255, 0)):
+    lane_image = np.zeros_like(frame)
+    if lanes:
+        for lane in lanes:
+            for x1, y1, x2, y2 in lane:
+                cv2.line(lane_image, (x1, y1), (x2, y2), color, 4)
+    lane_image = cv2.addWeighted(frame, 0.8, lane_image, 1, 1)
+    return lane_image
