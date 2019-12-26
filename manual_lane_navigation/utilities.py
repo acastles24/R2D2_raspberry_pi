@@ -138,3 +138,18 @@ def stabilize_steering(current, new, num_lanes, max_dev_two_lanes = 5, max_def_o
         stabilized_angle = new
     
     return stabilized_angle
+
+
+def display_heading(frame, steering_angle, line_color=(0, 0, 255), line_width=5):
+    heading_image = np.zeros_like(frame)
+    height, width, _ = frame.shape
+    steering_rad = (steering_angle + 90) / 180 * math.pi
+    x1 = int(width / 2)
+    y1 = height
+    x2 = int(x1 - height / 2 / math.tan(steering_rad))
+    y2 = int(height / 2)
+
+    cv2.line(heading_image, (x1, y1), (x2, y2), line_color, line_width)
+    heading_image = cv2.addWeighted(frame, 0.8, heading_image, 1, 1)
+
+    return heading_image
