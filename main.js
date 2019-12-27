@@ -2,6 +2,7 @@ const { Scanner, Stance, Utils, R2D2 } = require('spherov2.js')
 const {r2d2Functions} = require('./r2d2_functions/move_functions')
 const {MQTTConnection} = require('./utilities/mqtt_connection')
 const {ManualControl} = require('./r2d2_functions/manual_drive')
+const {ManualLaneNav} = require('./manual_lane_navigation/manual_lane_naviation')
 // const {cv} = require('opencv')
 
 /**
@@ -25,7 +26,7 @@ async function main() {
 
     ManualControlInitialized = new ManualControl(r2d2_functions)
 
-    ManualLaneNavInitialized = new ManualLaneNav(r2d2_functions, camera)
+    ManualLaneNavInitialized = new ManualLaneNav(r2d2_functions)
 
     const driveModeExecuteDict = {
         'rpi/manualControl': ManualControlInitialized
