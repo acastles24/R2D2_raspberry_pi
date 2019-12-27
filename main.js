@@ -2,6 +2,7 @@ const { Scanner, Stance, Utils, R2D2 } = require('spherov2.js')
 const {r2d2Functions} = require('./r2d2_functions/move_functions')
 const {MQTTConnection} = require('./utilities/mqtt_connection')
 const {ManualControl} = require('./r2d2_functions/manual_drive')
+// const {cv} = require('opencv')
 
 /**
  * Connects to R2-D2
@@ -24,6 +25,8 @@ async function main() {
 
     ManualControlInitialized = new ManualControl(r2d2_functions)
 
+    ManualLaneNavInitialized = new ManualLaneNav(r2d2_functions, camera)
+
     const driveModeExecuteDict = {
         'rpi/manualControl': ManualControlInitialized
     }
@@ -33,6 +36,8 @@ async function main() {
     // todo: static ip
     // todo: without wifi?
     // todo: incorporate into app
+
+
 }
 
 main()

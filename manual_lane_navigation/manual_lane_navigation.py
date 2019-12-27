@@ -1,4 +1,5 @@
 import cv2
+import sys
 from utilities import BGR_to_HSV, blue_mask, detect_edges, crop_frame, line_segments, average_lines, display_lanes, calc_steering_angle, display_heading
 
 def detect_lanes(frame_raw):
@@ -18,19 +19,17 @@ def detect_lanes(frame_raw):
 
     return lanes, lane_image
 
-def manual_lane_navigation(frame_raw):
+# frame_raw = cv2.imread('/home/pi/test_image.jpg')
 
-    # frame_raw = cv2.imread('/home/pi/test_image.jpg')
+lanes, lane_image = detect_lanes(sys.argv[1])
 
-    lanes, lane_image = detect_lanes(frame_raw)
+raw_angle = calc_steering_angle(frame_raw, lanes)
 
-    raw_angle = calc_steering_angle(frame_raw, lanes)
+lanes_heading_image = display_heading(lane_image, raw_angle)
 
-    lanes_heading_image = display_heading(lane_image, raw_angle)
+# cv2.imshow('lanes', lanes_heading_image)
 
-    # cv2.imshow('lanes', lanes_heading_image)
+# cv2.waitKey(0) # waits until a key is pressed
+# cv2.destroyAllWindows() # destroys the window showing image
 
-    # cv2.waitKey(0) # waits until a key is pressed
-    # cv2.destroyAllWindows() # destroys the window showing image
-
-    return raw_angle, lanes_heading_image
+return raw_angle, lanes_heading_image
