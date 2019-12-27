@@ -13,6 +13,7 @@
     "cmake": "0.0.4",
     "debug": "^4.1.1",
     "mqtt": "^3.0.0",
+    "node-gyp": "^5.0.7",
     "opencv4nodejs": "^5.5.0",
     "spherov2.js": "^0.0.10"
   },
