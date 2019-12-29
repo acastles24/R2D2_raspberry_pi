@@ -21,7 +21,7 @@ def detect_lanes(frame_raw):
 
 # frame_raw = cv2.imread('/home/pi/test_image.jpg')
 
-lanes, lane_image = detect_lanes(sys.argv[1])
+lanes, lane_image = detect_lanes(sys.argv)
 
 raw_angle = calc_steering_angle(frame_raw, lanes)
 
@@ -32,4 +32,5 @@ lanes_heading_image = display_heading(lane_image, raw_angle)
 # cv2.waitKey(0) # waits until a key is pressed
 # cv2.destroyAllWindows() # destroys the window showing image
 
-return raw_angle, lanes_heading_image
+print(lanes_heading_image, raw_angle)
+sys.stdout.flush()
