@@ -5,11 +5,8 @@ from utilities import BGR_to_HSV, blue_mask, detect_edges, crop_frame, line_segm
 
 def detect_lanes(frame_raw):
     frame_hsv = BGR_to_HSV(frame_raw)
-    cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_hsv.jpg', frame_hsv)
 
     frame_blue_mask = blue_mask(frame_hsv)
-    cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_blue.jpg', frame_blue_mask)
-
 
     frame_edges = detect_edges(frame_blue_mask)
 
@@ -47,5 +44,5 @@ cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{
 # cv2.waitKey(0) # waits until a key is pressed
 # cv2.destroyAllWindows() # destroys the window showing image
 
-print(lanes_heading_image, raw_angle)
+# print(lanes_heading_image, raw_angle)
 sys.stdout.flush()

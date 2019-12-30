@@ -9,8 +9,7 @@ def BGR_to_HSV(frame):
 
 
 def blue_mask(frame):
-    # return cv2.inRange(frame, np.array([30, 40, 40]), np.array([200, 255, 255]))
-    return cv2.inRange(frame, np.array([90, 0, 0], np.uint8), np.array([135, 255, 255], np.uint8))
+    return cv2.inRange(frame, np.array([70, 0, 0], np.uint8), np.array([150, 255, 255], np.uint8))
 
 
 def detect_edges(frame):
@@ -42,7 +41,7 @@ def line_segments(edges):
 
 def average_lines(frame, line_segments):
     lanes = []
-    if line_segments is not None:
+    if line_segments is None:
         print('No lanes detected')
         return lanes
     
@@ -70,7 +69,6 @@ def average_lines(frame, line_segments):
             else:
                 if x1 > right_boundary and x2 > right_boundary:
                     right_lanes.append((slope, intercept))
-
     left_lane_average = np.average(left_lanes, axis=0)
     if len(left_lanes) > 0:
         lanes.append(generate_points(frame, left_lane_average))
