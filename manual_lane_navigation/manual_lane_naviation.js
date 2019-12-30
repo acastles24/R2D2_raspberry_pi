@@ -20,7 +20,6 @@ class ManualLaneNav{
         let run_num = 1
         let frame_num = 1
         let _, image_lane = this.camera.read()
-        cv.imwrite('/home/pi/R2D2_raspberry_pi/test_images/blah.jpg', image_lane)
         let image_string = ManualLaneNav.image_to_str(image_lane)
         const steering_angle = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, run_num.toString(), frame_num.toString())
         this.camera.release()
