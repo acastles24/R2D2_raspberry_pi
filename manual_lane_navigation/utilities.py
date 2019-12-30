@@ -1,6 +1,8 @@
 import cv2
 import math
+import base64
 import numpy as np
+
 
 def BGR_to_HSV(frame):
     return cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -153,3 +155,10 @@ def display_heading(frame, steering_angle, line_color=(0, 0, 255), line_width=5)
     heading_image = cv2.addWeighted(frame, 0.8, heading_image, 1, 1)
 
     return heading_image
+
+
+def decode_image(image_str):
+    data = image_str.split(',')[1]
+    decoded_string = np.fromstring(base64.b64decode(data), np.uint8)
+    decoded_image = cv2.imdecode(decoded_string, cv2.IMREAD_COLOR)
+    return decoded_image

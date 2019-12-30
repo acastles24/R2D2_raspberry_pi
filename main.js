@@ -8,7 +8,7 @@ const {ManualLaneNav} = require('./manual_lane_navigation/manual_lane_naviation'
 /**
  * Connects to R2-D2
  * @param {Scanner from spherov2} scanner 
- * @param {R2-D2 type from spherov2} scanner 
+ * @param {R2-D2 type from spherov2} R2D2 
  * @returns {Connected R2-D2 instance}
  * todo: retry if connection failed
  */

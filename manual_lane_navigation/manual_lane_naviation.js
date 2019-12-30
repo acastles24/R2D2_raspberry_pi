@@ -15,19 +15,13 @@ class ManualLaneNav{
 
     async execute(message){
         let image_lane = this.camera.read()
-        let base64Image = cv.imencode('.jpg', image_lane).toString('base64')
-        // let base64Image = buffer.toString('base64')
-        // let jpg_text = fs.readFileSync(buffer, 'base64')
-        // let buff = new Buffer(image_lane)
-        // let base64Image = buff.toString('base64')
-        const steering_angle = await run_python('./manual_lane_navigation/manual_lane_navigation.py', base64Image)
+        let image_string = ManualLaneNav.image_to_str(image_lane)
+        const steering_angle = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string)
         this.camera.release()
         console.log(steering_angle)
     }
-}
 
-
-function run_python(script_name, arg){
+static run_python(script_name, arg){
     return new Promise((resolve, reject) => {
         const process = spawn('python3', [script_name, arg])
         const out = []
@@ -57,6 +51,14 @@ function run_python(script_name, arg){
             }
         })
     })
+}
+
+static image_to_str(image){
+    let base64Image = cv.imencode('.jpg', image).toString('base64')
+    let base64ImageOutput = 'data:image/jpeg;base64,' + base64Image
+    return base64ImageOutput
+}
+
 }
 
 exports.ManualLaneNav = ManualLaneNav
