@@ -42,7 +42,7 @@ def line_segments(edges):
 def average_lines(frame, line_segments):
     lanes = []
     if line_segments is None:
-        print('No lanes detected')
+        # print('No lanes detected')
         return lanes
     
     height, width, _ = frame.shape
@@ -107,11 +107,11 @@ def calc_steering_angle(frame, lanes):
     height, width, _ = frame.shape
 
     if len(lanes) == 1:
-        print('One lane detected')
+        # print('One lane detected')
         x1, _, x2, _ = lanes[0][0]
         x_offset = x2 - x1
     else:
-        print('Two lanes detected')
+        # print('Two lanes detected')
         _, _, left_x2, _ = lanes[0][0]
         _, _, right_x2, _ = lanes[1][0]
         camera_offset = 0
@@ -124,21 +124,6 @@ def calc_steering_angle(frame, lanes):
     angle_deg = int(angle_rad * 180 / math.pi)
 
     return angle_rad
-
-def stabilize_steering(current, new, num_lanes, max_dev_two_lanes = 5, max_def_one_lane=1):
-    if num_lanes == 2:
-        max_dev = max_dev_two_lanes
-    else:
-        max_dev = max_dev_one_lane
-
-    dev = new - current
-
-    if abs(dev) > max_dev:
-        stabilized_angle = current + max_dev
-    else:
-        stabilized_angle = new
-    
-    return stabilized_angle
 
 
 def display_heading(frame, steering_angle, line_color=(0, 0, 255), line_width=5):

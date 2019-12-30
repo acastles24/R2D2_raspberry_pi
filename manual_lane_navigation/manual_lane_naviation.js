@@ -19,11 +19,14 @@ class ManualLaneNav{
     async execute(message){
         let run_num = 1
         let frame_num = 1
+        let curr_steer_angle = 0
         let _, image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
-        const steering_angle = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, run_num.toString(), frame_num.toString())
+        let new_steering_angle_str = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, run_num.toString(), frame_num.toString())
         this.camera.release()
-        console.log(steering_angle)
+        let new_steering_angle = parseFloat(new_steering_angle_str)
+        let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
+        console.log(steering_stabilized)
     }
 
 static run_python(script_name, image, run_num, frame_num){
@@ -62,6 +65,21 @@ static image_to_str(image){
     let base64Image = cv.imencode('.jpg', image).toString('base64')
     let base64ImageOutput = 'data:image/jpeg;base64,' + base64Image
     return base64ImageOutput
+}
+
+static stabilize_steering(current_angle, new_angle){
+    let max_change = 5
+    if (Math.abs(new_angle - current_angle) > max_change){
+        if (new_angle > current_angle){
+            return current_angle + max_change
+        }
+        else{
+            return current_angle - max_change
+        }
+    }
+    else{
+        return new_angle
+    }
 }
 
 }

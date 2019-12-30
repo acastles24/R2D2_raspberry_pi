@@ -28,13 +28,13 @@ async function main() {
 
     ManualLaneNavInitialized = new ManualLaneNav(r2d2_functions)
 
-    ManualLaneNavInitialized.execute('hi')
-
     const driveModeExecuteDict = {
         'rpi/manualControl': ManualControlInitialized
     }
 
     client_connected = new MQTTConnection('192.168.1.13', driveModeExecuteDict)
+
+    ManualLaneNavInitialized.execute('hi')
     
     // todo: static ip
     // todo: without wifi?

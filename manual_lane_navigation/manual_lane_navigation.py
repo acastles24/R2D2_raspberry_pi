@@ -11,8 +11,6 @@ def detect_lanes(frame_raw):
     frame_edges = detect_edges(frame_blue_mask)
 
     edges_cropped = crop_frame(frame_edges, 50, 50)
-    cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_edges.jpg', edges_cropped)
-
 
     lines_detected = line_segments(edges_cropped)
 
@@ -38,11 +36,5 @@ lanes_heading_image = display_heading(lane_image, raw_angle)
 
 cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_lanes.jpg', lanes_heading_image)
 
-
-# cv2.imshow('lanes', lanes_heading_image)
-
-# cv2.waitKey(0) # waits until a key is pressed
-# cv2.destroyAllWindows() # destroys the window showing image
-
-# print(lanes_heading_image, raw_angle)
+print(raw_angle)
 sys.stdout.flush()
