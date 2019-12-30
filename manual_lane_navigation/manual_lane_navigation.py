@@ -24,15 +24,18 @@ run_num = sys.argv[2]
 frame_num = sys.argv[3]
 today = date.today()
 
-lane_image = decode_image(sys.argv[1])
+raw_image = decode_image(sys.argv[1])
 
-cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}.jpg', lane_image)
+cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_raw.jpg', raw_image)
 
-lanes, lane_image = detect_lanes(sys.argv[1])
+lanes, lane_image = detect_lanes(raw_image)
 
-raw_angle = calc_steering_angle(frame_raw, lanes)
+raw_angle = calc_steering_angle(raw_image, lanes)
 
 lanes_heading_image = display_heading(lane_image, raw_angle)
+
+cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_lanes.jpg', lanes_heading_image)
+
 
 # cv2.imshow('lanes', lanes_heading_image)
 

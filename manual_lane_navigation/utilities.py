@@ -41,7 +41,7 @@ def line_segments(edges):
 
 def average_lines(frame, line_segments):
     lanes = []
-    if len(line_segments) == 0:
+    if not line_segments:
         print('No lanes detected')
         return lanes
     

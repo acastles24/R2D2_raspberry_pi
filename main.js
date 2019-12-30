@@ -28,6 +28,8 @@ async function main() {
 
     ManualLaneNavInitialized = new ManualLaneNav(r2d2_functions)
 
+    ManualLaneNavInitialized.execute('hi')
+
     const driveModeExecuteDict = {
         'rpi/manualControl': ManualControlInitialized
     }
