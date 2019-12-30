@@ -1,5 +1,6 @@
 const cv = require('opencv4nodejs');
 const spawn = require('child_process').spawn
+const fs = require('fs')
 
 
 class ManualLaneNav{
@@ -14,7 +15,13 @@ class ManualLaneNav{
 
     async execute(message){
         let image_lane = this.camera.read()
-        const steering_angle = await run_python('./manual_lane_navigation/manual_lane_navigation.py', image_lane)
+        let base64Image = cv.imencode('.jpg', image_lane).toString('base64')
+        // let base64Image = buffer.toString('base64')
+        // let jpg_text = fs.readFileSync(buffer, 'base64')
+        // let buff = new Buffer(image_lane)
+        // let base64Image = buff.toString('base64')
+        const steering_angle = await run_python('./manual_lane_navigation/manual_lane_navigation.py', base64Image)
+        this.camera.release()
         console.log(steering_angle)
     }
 }

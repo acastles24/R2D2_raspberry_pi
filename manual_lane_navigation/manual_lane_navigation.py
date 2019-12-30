@@ -1,5 +1,7 @@
 import cv2
 import sys
+import base64
+import numpy as np
 from utilities import BGR_to_HSV, blue_mask, detect_edges, crop_frame, line_segments, average_lines, display_lanes, calc_steering_angle, display_heading
 
 def detect_lanes(frame_raw):
@@ -20,8 +22,14 @@ def detect_lanes(frame_raw):
     return lanes, lane_image
 
 # frame_raw = cv2.imread('/home/pi/test_image.jpg')
+decoded_string = base64.b64decode(sys.argv[1])
 
-lanes, lane_image = detect_lanes(sys.argv)
+decoded_image = np.frombuffer(decoded_string, dtype = np.uint8)
+decoded_image = decoded_image.reshape(320, 240)
+
+cv2.imwrite('/home/pi/R2D2_raspberry_pi/test_images/test_python.jpg', decoded_image)
+
+lanes, lane_image = detect_lanes(sys.argv[1])
 
 raw_angle = calc_steering_angle(frame_raw, lanes)
 
