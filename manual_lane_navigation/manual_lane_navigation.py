@@ -1,5 +1,6 @@
 import cv2
 import sys
+from datetime import date
 from utilities import BGR_to_HSV, blue_mask, detect_edges, crop_frame, line_segments, average_lines, display_lanes, calc_steering_angle, display_heading, decode_image
 
 def detect_lanes(frame_raw):
@@ -19,9 +20,13 @@ def detect_lanes(frame_raw):
 
     return lanes, lane_image
 
+run_num = sys.argv[2]
+frame_num = sys.argv[3]
+today = date.today()
+
 lane_image = decode_image(sys.argv[1])
 
-cv2.imwrite('/home/pi/R2D2_raspberry_pi/test_images/test_python.jpg', lane_image)
+cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}.jpg', lane_image)
 
 lanes, lane_image = detect_lanes(sys.argv[1])
 

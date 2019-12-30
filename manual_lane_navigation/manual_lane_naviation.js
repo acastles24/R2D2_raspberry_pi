@@ -14,16 +14,18 @@ class ManualLaneNav{
     }
 
     async execute(message){
+        let run_num = 1
+        let frame_num = 1
         let image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
-        const steering_angle = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string)
+        const steering_angle = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, run_num.toString(), frame_num.toString())
         this.camera.release()
         console.log(steering_angle)
     }
 
-static run_python(script_name, arg){
+static run_python(script_name, image, run_num, frame_num){
     return new Promise((resolve, reject) => {
-        const process = spawn('python3', [script_name, arg])
+        const process = spawn('python3', [script_name, image, run_num, frame_num])
         const out = []
         process.stdout.on(
             'data',
