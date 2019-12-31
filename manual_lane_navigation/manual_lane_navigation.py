@@ -1,6 +1,5 @@
 import cv2
 import sys
-from datetime import date
 from utilities import BGR_to_HSV, blue_mask, detect_edges, crop_frame, line_segments, average_lines, display_lanes, calc_steering_angle, display_heading, decode_image
 
 def detect_lanes(frame_raw):
@@ -8,14 +7,9 @@ def detect_lanes(frame_raw):
 
     frame_blue_mask = blue_mask(frame_hsv)
 
-    cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_blue.jpg', frame_blue_mask)
-
     frame_edges = detect_edges(frame_blue_mask)
 
     edges_cropped = crop_frame(frame_edges, 75, 50)
-
-    cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_edges.jpg', edges_cropped)
-
 
     lines_detected = line_segments(edges_cropped)
 
@@ -25,13 +19,12 @@ def detect_lanes(frame_raw):
 
     return lanes, lane_image
 
-run_num = sys.argv[2]
+date_time = sys.argv[2]
 frame_num = sys.argv[3]
-today = date.today()
 
 raw_image = decode_image(sys.argv[1])
 
-cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_raw.jpg', raw_image)
+cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{date_time}_frame{frame_num}_raw.jpg', raw_image)
 
 lanes, lane_image = detect_lanes(raw_image)
 
@@ -39,7 +32,7 @@ raw_angle = calc_steering_angle(raw_image, lanes)
 
 lanes_heading_image = display_heading(lane_image, raw_angle)
 
-cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_lanes.jpg', lanes_heading_image)
+cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{date_time}_frame{frame_num}_lanes.jpg', lanes_heading_image)
 
 print(raw_angle)
 sys.stdout.flush()

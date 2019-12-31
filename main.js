@@ -29,7 +29,8 @@ async function main() {
     ManualLaneNavInitialized = new ManualLaneNav(r2d2_functions)
 
     const driveModeExecuteDict = {
-        'rpi/manualControl': ManualControlInitialized
+        'rpi/manualControl': ManualControlInitialized,
+        'rpi/laneNav': ManualLaneNavInitialized
     }
 
     client_connected = new MQTTConnection('192.168.1.13', driveModeExecuteDict)

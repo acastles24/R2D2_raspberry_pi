@@ -6,6 +6,7 @@ const fs = require('fs')
 class ManualLaneNav{
     constructor(r2d2_functions){
         this.r2d2_functions = r2d2_functions
+        // todo: move camera out of manual lane nav?
         this.camera = new cv.VideoCapture(0)
         for (let i=0; i<30; i++){
             let _, temp = this.camera.read()
@@ -13,16 +14,15 @@ class ManualLaneNav{
         console.log('Camera initialized')
         this.camera.set(3, 320)
         this.camera.set(4, 240)
-        // cv.imwrite('/home/pi/R2D2_raspberry_pi/test_images/test.jpg', image_lane)
     }
 
     async execute(message){
-        let run_num = 1
+        let date = ManualLaneNav.get_date()
         let frame_num = 1
-        let curr_steer_angle = 50
+        let curr_steer_angle = 0
         let _, image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
-        let new_steering_angle_str = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, run_num.toString(), frame_num.toString())
+        let new_steering_angle_str = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, date, frame_num.toString())
         this.camera.release()
         let new_steering_angle = parseFloat(new_steering_angle_str)
         let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
@@ -80,6 +80,17 @@ static stabilize_steering(current_angle, new_angle){
     else{
         return new_angle
     }
+}
+
+static get_date(){
+    let curr_date = new Date()
+    let year = curr_date.getFullYear()
+    let month = curr_date.getMonth() + 1
+    let day = curr_date.getDate()
+    let hours = curr_date.getHours()
+    let minutes = curr_date.getMinutes()
+    let seconds = curr_date.getSeconds()
+    return (year + '_' + month + '_' + day + '_' + hours + '_' + minutes + '_' + seconds)
 }
 
 }
