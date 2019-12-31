@@ -14,20 +14,39 @@ class ManualLaneNav{
         console.log('Camera initialized')
         this.camera.set(3, 320)
         this.camera.set(4, 240)
+        this.active = false
     }
 
     async execute(message){
-        let date = ManualLaneNav.get_date()
-        let frame_num = 1
-        let curr_steer_angle = 0
+        if (message === 'GO'){
+            this.active = true
+            this.start_lane_nav()
+        }
+        else if (message === 'STOP'){
+            this.active = false
+        }
+    }
+
+start_lane_nav(){
+    let date = ManualLaneNav.get_date()
+    let curr_steer_angle = 0
+    let frame_num = 1
+    while (this.active === true){
         let _, image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
         let new_steering_angle_str = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, date, frame_num.toString())
         this.camera.release()
         let new_steering_angle = parseFloat(new_steering_angle_str)
+        if (new_steering_angle === -1000){
+            this.active = false
+            continue
+        }
         let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
-        console.log(steering_stabilized)
+        console.log(steering_stabilized + ' Steering Angle Calculated')
+        curr_steer_angle = steering_stabilized
+        frame_num = frame_num + 1
     }
+}
 
 static run_python(script_name, image, run_num, frame_num){
     return new Promise((resolve, reject) => {

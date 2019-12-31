@@ -35,7 +35,7 @@ async function main() {
 
     client_connected = new MQTTConnection('192.168.1.13', driveModeExecuteDict)
 
-    ManualLaneNavInitialized.execute('hi')
+    // ManualLaneNavInitialized.execute('hi')
     
     // todo: static ip
     // todo: without wifi?
