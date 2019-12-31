@@ -24,18 +24,18 @@ async function main() {
     await r2d2_functions.resetHeading()
     await r2d2_functions.set_stance(3)
 
-    ManualControlInitialized = new ManualControl(r2d2_functions)
+    ManualControlInitialized = await new ManualControl(r2d2_functions)
 
-    ManualLaneNavInitialized = new ManualLaneNav(r2d2_functions)
+    ManualLaneNavInitialized = await new ManualLaneNav(r2d2_functions)
 
     const driveModeExecuteDict = {
         'rpi/manualControl': ManualControlInitialized,
         'rpi/laneNav': ManualLaneNavInitialized
     }
 
-    client_connected = new MQTTConnection('192.168.1.13', driveModeExecuteDict)
+    client_connected = await new MQTTConnection('192.168.1.13', driveModeExecuteDict)
 
-    // ManualLaneNavInitialized.execute('hi')
+    ManualLaneNavInitialized.execute('GO')
     
     // todo: static ip
     // todo: without wifi?

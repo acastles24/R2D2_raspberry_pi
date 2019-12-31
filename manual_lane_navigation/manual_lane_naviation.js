@@ -27,7 +27,7 @@ class ManualLaneNav{
         }
     }
 
-start_lane_nav(){
+async start_lane_nav(){
     let date = ManualLaneNav.get_date()
     let curr_steer_angle = 0
     let frame_num = 1
@@ -35,14 +35,13 @@ start_lane_nav(){
         let _, image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
         let new_steering_angle_str = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, date, frame_num.toString())
-        this.camera.release()
         let new_steering_angle = parseFloat(new_steering_angle_str)
         if (new_steering_angle === -1000){
             this.active = false
             continue
         }
         let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
-        console.log(steering_stabilized + ' Steering Angle Calculated')
+        console.log(steering_stabilized + ' Steering Angle Calculated in Frame ' + frame_num)
         curr_steer_angle = steering_stabilized
         frame_num = frame_num + 1
     }
