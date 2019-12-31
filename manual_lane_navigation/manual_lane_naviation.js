@@ -19,7 +19,7 @@ class ManualLaneNav{
     async execute(message){
         let run_num = 1
         let frame_num = 1
-        let curr_steer_angle = 0
+        let curr_steer_angle = 50
         let _, image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
         let new_steering_angle_str = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, run_num.toString(), frame_num.toString())

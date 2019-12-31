@@ -8,9 +8,14 @@ def detect_lanes(frame_raw):
 
     frame_blue_mask = blue_mask(frame_hsv)
 
+    cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_blue.jpg', frame_blue_mask)
+
     frame_edges = detect_edges(frame_blue_mask)
 
-    edges_cropped = crop_frame(frame_edges, 50, 50)
+    edges_cropped = crop_frame(frame_edges, 75, 50)
+
+    cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{today}_run{run_num}_frame{frame_num}_edges.jpg', edges_cropped)
+
 
     lines_detected = line_segments(edges_cropped)
 

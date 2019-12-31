@@ -69,13 +69,14 @@ def average_lines(frame, line_segments):
             else:
                 if x1 > right_boundary and x2 > right_boundary:
                     right_lanes.append((slope, intercept))
-    left_lane_average = np.average(left_lanes, axis=0)
-    if len(left_lanes) > 0:
-        lanes.append(generate_points(frame, left_lane_average))
 
-    right_lane_average = np.average(right_lanes, axis=0)
+    
+    if len(left_lanes) > 0:
+        left_lane_average = np.average(left_lanes, axis=0)
+        lanes.append(generate_points(frame, left_lane_average))
     
     if len(right_lanes) > 0:
+        right_lane_average = np.average(right_lanes, axis=0)
         lanes.append(generate_points(frame, right_lane_average))
 
     return lanes
@@ -123,7 +124,7 @@ def calc_steering_angle(frame, lanes):
     angle_rad = math.atan(x_offset / y_offset)
     angle_deg = int(angle_rad * 180 / math.pi)
 
-    return angle_rad
+    return angle_deg
 
 
 def display_heading(frame, steering_angle, line_color=(0, 0, 255), line_width=5):
