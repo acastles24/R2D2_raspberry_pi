@@ -15,6 +15,7 @@
     "mqtt": "^3.0.0",
     "node-gyp": "^5.0.7",
     "opencv4nodejs": "^5.5.0",
+    "python-shell": "^1.0.8",
     "spherov2.js": "^0.0.10"
   },
   "devDependencies": {},

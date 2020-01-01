@@ -19,20 +19,30 @@ def detect_lanes(frame_raw):
 
     return lanes, lane_image
 
-date_time = sys.argv[2]
-frame_num = sys.argv[3]
+def main():
+    while True:
+        args = sys.stdin.readline()
+        if args:
+            args_split = args.split(' ')
+            date_time = args_split[1]
+            frame_num = args_split[2]
 
-raw_image = decode_image(sys.argv[1])
+            raw_image = decode_image(args_split[0])
 
-cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{date_time}_frame{frame_num}_raw.jpg', raw_image)
+            cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{date_time}_frame{frame_num}_raw.jpg', raw_image)
 
-lanes, lane_image = detect_lanes(raw_image)
+            lanes, lane_image = detect_lanes(raw_image)
 
-raw_angle = calc_steering_angle(raw_image, lanes)
+            raw_angle = calc_steering_angle(raw_image, lanes)
 
-lanes_heading_image = display_heading(lane_image, raw_angle)
 
-cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{date_time}_frame{frame_num}_lanes.jpg', lanes_heading_image)
+            lanes_heading_image = display_heading(lane_image, raw_angle)
 
-print(raw_angle)
-sys.stdout.flush()
+            cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{date_time}_frame{frame_num}_lanes.jpg', lanes_heading_image)
+
+            sys.stdout.write(str(raw_angle))
+
+            sys.stdout.flush()
+
+if __name__ == '__main__':
+    main()

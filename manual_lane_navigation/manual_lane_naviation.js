@@ -1,5 +1,6 @@
 const cv = require('opencv4nodejs');
-const spawn = require('child_process').spawn
+// const spawn = require('child_process').spawn
+const {PythonShell} = require('python-shell')
 const fs = require('fs')
 
 
@@ -15,6 +16,7 @@ class ManualLaneNav{
         this.camera.set(3, 320)
         this.camera.set(4, 240)
         this.active = false
+        this.shell = new PythonShell('./manual_lane_navigation/manual_lane_navigation.py')
     }
 
     async execute(message){
@@ -34,47 +36,32 @@ async start_lane_nav(){
     while (this.active === true){
         let _, image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
-        let new_steering_angle_str = await ManualLaneNav.run_python('./manual_lane_navigation/manual_lane_navigation.py', image_string, date, frame_num.toString())
+        let new_steering_angle_str = await this.run_python(image_string, date, frame_num.toString())
+        
         let new_steering_angle = parseFloat(new_steering_angle_str)
         if (new_steering_angle === -1000){
             this.active = false
             continue
         }
+        
         let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
+        
         console.log(steering_stabilized + ' Steering Angle Calculated in Frame ' + frame_num)
         curr_steer_angle = steering_stabilized
         frame_num = frame_num + 1
     }
 }
 
-static run_python(script_name, image, run_num, frame_num){
+run_python(image, date, frame_num){
     return new Promise((resolve, reject) => {
-        const process = spawn('python3', [script_name, image, run_num, frame_num])
         const out = []
-        process.stdout.on(
-            'data',
-            (data) => {
-                out.push(data.toString())
-                console.log(data.toString())
-            }
-        );
-        
-        const err = []
-        process.stderr.on(
-            'data',
-            (data) => {
-                err.push(data.toString())
-                console.log(data.toString() + ' Error')
-            }
-        );
-
-        process.on('exit', (code, signal)=>{
-            if (code === 0) {
-                resolve(out)
-            }
-            else{
-                reject(new Error(err.join('\n')))
-            }
+        this.shell.send(image + ' ' + date + ' ' + frame_num)
+        this.shell.on('message', function (message) {
+            out.push(message)
+            resolve(out)
+          })
+        this.shell.end(function (err,code,signal) {
+            if (err) throw err
         })
     })
 }
