@@ -23,7 +23,7 @@ def main():
     while True:
         args = sys.stdin.readline()
         if args:
-            args_split = args.split(' ')
+            args_split = args.strip().split(' ')
             date_time = args_split[1]
             frame_num = args_split[2]
 
@@ -35,14 +35,15 @@ def main():
 
             raw_angle = calc_steering_angle(raw_image, lanes)
 
-
             lanes_heading_image = display_heading(lane_image, raw_angle)
 
             cv2.imwrite(f'/home/pi/R2D2_raspberry_pi/test_images/{date_time}_frame{frame_num}_lanes.jpg', lanes_heading_image)
 
-            sys.stdout.write(str(raw_angle))
+            print(raw_angle)
 
             sys.stdout.flush()
+
+            args = None
 
 if __name__ == '__main__':
     main()
