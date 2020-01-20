@@ -1,5 +1,4 @@
 const cv = require('opencv4nodejs');
-// const spawn = require('child_process').spawn
 const {PythonShell} = require('python-shell')
 const fs = require('fs')
 
@@ -48,6 +47,8 @@ async start_lane_nav(){
         let steering_stabilized = await ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
         
         console.log(steering_stabilized + ' Steering Angle Calculated in Frame ' + frame_num)
+
+        
         curr_steer_angle = steering_stabilized
         frame_num = frame_num + 1
     }
@@ -82,6 +83,15 @@ static stabilize_steering(current_angle, new_angle){
     }
     else{
         return new_angle
+    }
+}
+
+static convert_steering_angle(angle){
+    if (angle < 0){
+        return 360 + angle
+    }
+    else{
+        return angle
     }
 }
 
