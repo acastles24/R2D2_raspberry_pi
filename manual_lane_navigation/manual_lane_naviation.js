@@ -2,6 +2,7 @@ const cv = require('opencv4nodejs');
 const {PythonShell} = require('python-shell')
 const fs = require('fs')
 
+const SPEED = 100
 
 class ManualLaneNav{
     constructor(r2d2_functions){
@@ -43,19 +44,23 @@ async start_lane_nav(){
             console.log('No more lanes detected')
             continue
         }
-        
-        let steering_stabilized = await ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
-        
-        console.log(steering_stabilized + ' Steering Angle Calculated in Frame ' + frame_num)
 
+        let new_angle_converted = ManualLaneNav.convert_steering_angle(new_steering_angle)
         
-        curr_steer_angle = steering_stabilized
+        // let steering_stabilized = await ManualLaneNav.stabilize_steering(curr_steer_angle, new_angle_converted)
+        
+        console.log(new_angle_converted + ' Steering Angle Calculated in Frame ' + frame_num)
+
+        this.r2d2_functions.resetHeading()
+        this.r2d2_functions.manualRoll(SPEED, new_angle_converted, [2])
+        
+        curr_steer_angle = new_angle_converted
         frame_num = frame_num + 1
     }
 }
 
 run_python(image, date, frame_num){
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const out = []
         this.shell.on('message', function (message) {
             out.push(message)
