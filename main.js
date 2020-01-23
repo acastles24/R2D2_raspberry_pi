@@ -3,7 +3,6 @@ const {r2d2Functions} = require('./r2d2_functions/move_functions')
 const {MQTTConnection} = require('./utilities/mqtt_connection')
 const {ManualControl} = require('./r2d2_functions/manual_drive')
 const {ManualLaneNav} = require('./manual_lane_navigation/manual_lane_naviation')
-// const {cv} = require('opencv')
 
 /**
  * Connects to R2-D2

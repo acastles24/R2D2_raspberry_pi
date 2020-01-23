@@ -9,7 +9,7 @@ def detect_lanes(frame_raw):
 
     frame_edges = detect_edges(frame_blue_mask)
 
-    edges_cropped = crop_frame(frame_edges, 65, 50)
+    edges_cropped = crop_frame(frame_edges, 70, 50)
 
     lines_detected = line_segments(edges_cropped)
 

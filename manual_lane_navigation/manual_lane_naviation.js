@@ -2,7 +2,7 @@ const cv = require('opencv4nodejs');
 const {PythonShell} = require('python-shell')
 const fs = require('fs')
 
-const SPEED = 100
+const SPEED = 220
 
 class ManualLaneNav{
     constructor(r2d2_functions){
@@ -30,33 +30,36 @@ class ManualLaneNav{
     }
 
 async start_lane_nav(){
-    let date = ManualLaneNav.get_date()
-    let curr_steer_angle = 0
-    let frame_num = 1
+    var date = ManualLaneNav.get_date()
+    var curr_steer_angle = 0
+    var frame_num = 1
     while (this.active === true){
-        let _, image_lane = await this.camera.read()
-        let image_string = await ManualLaneNav.image_to_str(image_lane)
+        var starttime = new Date();
+        let _, image_lane = this.camera.read()
+        let image_string = ManualLaneNav.image_to_str(image_lane)
         let new_steering_angle_str = await this.run_python(image_string, date, frame_num.toString())
         
-        let new_steering_angle = await parseFloat(new_steering_angle_str)
+        let new_steering_angle = parseFloat(new_steering_angle_str)
         if (new_steering_angle === -1000){
             this.active = false
+            this.r2d2_functions.manualRoll(0, new_angle_converted, [2])
             console.log('No more lanes detected')
             continue
         }
 
-        let new_angle_converted = ManualLaneNav.convert_steering_angle(new_steering_angle)
-        
-        // let steering_stabilized = await ManualLaneNav.stabilize_steering(curr_steer_angle, new_angle_converted)
+        let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
+
+        var new_angle_converted = ManualLaneNav.convert_steering_angle(steering_stabilized)
         
         console.log(new_angle_converted + ' Steering Angle Calculated in Frame ' + frame_num)
 
         this.r2d2_functions.resetHeading()
         this.r2d2_functions.manualRoll(SPEED, new_angle_converted, [2])
-        
-        curr_steer_angle = new_angle_converted
+
+        curr_steer_angle = steering_stabilized
         frame_num = frame_num + 1
     }
+    await this.r2d2_functions.manualRoll(0, new_angle_converted, [2])
 }
 
 run_python(image, date, frame_num){

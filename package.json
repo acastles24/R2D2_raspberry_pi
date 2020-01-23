@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,7 @@
     "@abandonware/noble": "^1.9.2-5",
     "cmake": "0.0.4",
     "debug": "^4.1.1",
+    "jest": "^25.1.0",
     "mqtt": "^3.0.0",
     "node-gyp": "^5.0.7",
     "opencv4nodejs": "^5.5.0",

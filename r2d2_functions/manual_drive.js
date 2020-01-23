@@ -12,8 +12,8 @@ class ManualControl{
     }
 
     /**
- * Calculates velocity magnitude from received x and y components.
- * Rounds output to second decimal.
+ * Calculates velocity magnitude from received x and y components between 0 and 1.
+ * Rounds output to second decimal between 150 and 250.
  * @param {float} xvel : x component of velocity
  * @param {float} yvel : y component of velocity
  */
@@ -23,7 +23,7 @@ static convertVelocityCompToMag(xvel, yvel){
         return 0
     }
     else {
-        return (vmag/Math.SQRT2*200 + 50)
+        return (vmag/Math.SQRT2*100 + 150)
     }
     
 }
@@ -51,9 +51,9 @@ static convertJoystickRadtoHeading(angle){
  */
 static parseManualControlMessage(message){
     let messageString = message.toString()
-    let velX = messageString.split("velX = ")[1].split(" ")[0]
-    let velY = messageString.split("velY = ")[1].split(" ")[0]
-    let ang = messageString.split("ang = ")[1]
+    let velX = parseFloat(messageString.split("velX = ")[1].split(" ")[0])
+    let velY = parseFloat(messageString.split("velY = ")[1].split(" ")[0])
+    let ang = parseFloat(messageString.split("ang = ")[1])
     return{
         velX: velX,
         velY: velY,
