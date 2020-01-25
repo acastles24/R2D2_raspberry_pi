@@ -2,13 +2,13 @@ const cv = require('opencv4nodejs');
 const {PythonShell} = require('python-shell')
 const fs = require('fs')
 
-const SPEED = 220
+const SPEED = 200
 
 class ManualLaneNav{
     constructor(r2d2_functions){
         this.r2d2_functions = r2d2_functions
-        // todo: move camera out of manual lane nav?
         this.camera = new cv.VideoCapture(0)
+        // camera takes a few frames to adjust to lighting
         for (let i=0; i<30; i++){
             let _, temp = this.camera.read()
         }
@@ -31,32 +31,39 @@ class ManualLaneNav{
 
 async start_lane_nav(){
     var date = ManualLaneNav.get_date()
+    this.r2d2_functions.resetHeading()
     var curr_steer_angle = 0
+    var curr_steer_angle_converted = 0
     var frame_num = 1
     while (this.active === true){
-        var starttime = new Date();
+        
         let _, image_lane = this.camera.read()
         let image_string = ManualLaneNav.image_to_str(image_lane)
-        let new_steering_angle_str = await this.run_python(image_string, date, frame_num.toString())
         
+        var starttime = new Date();
+        let new_steering_angle_str = await this.run_python(image_string, date, frame_num.toString())
+        var endtime = new Date()
+        // console.log(endtime - starttime)
         let new_steering_angle = parseFloat(new_steering_angle_str)
         if (new_steering_angle === -1000){
             this.active = false
-            this.r2d2_functions.manualRoll(0, new_angle_converted, [2])
+            await this.r2d2_functions.manualRoll(0, new_angle_converted, [2])
             console.log('No more lanes detected')
             continue
         }
 
-        let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
+        if (frame_num > 1){
+            let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
+            console.log(steering_stabilized)
+            var new_angle_converted = ManualLaneNav.convert_steering_angle(steering_stabilized, curr_steer_angle_converted)
 
-        var new_angle_converted = ManualLaneNav.convert_steering_angle(steering_stabilized)
-        
-        console.log(new_angle_converted + ' Steering Angle Calculated in Frame ' + frame_num)
+            console.log(new_angle_converted + ' Steering Angle Calculated in Frame ' + frame_num)
 
-        this.r2d2_functions.resetHeading()
-        this.r2d2_functions.manualRoll(SPEED, new_angle_converted, [2])
+            await this.r2d2_functions.manualRoll(SPEED, new_angle_converted, [2])
 
-        curr_steer_angle = steering_stabilized
+            curr_steer_angle = steering_stabilized
+            curr_steer_angle_converted = new_angle_converted
+        }
         frame_num = frame_num + 1
     }
     await this.r2d2_functions.manualRoll(0, new_angle_converted, [2])
@@ -64,7 +71,7 @@ async start_lane_nav(){
 
 run_python(image, date, frame_num){
     return new Promise((resolve) => {
-        const out = []
+        let out = []
         this.shell.on('message', function (message) {
             out.push(message)
             resolve(out)
@@ -80,7 +87,7 @@ static image_to_str(image){
 }
 
 static stabilize_steering(current_angle, new_angle){
-    let max_change = 5
+    let max_change = 90
     if (Math.abs(new_angle - current_angle) > max_change){
         if (new_angle > current_angle){
             return current_angle + max_change
@@ -94,12 +101,16 @@ static stabilize_steering(current_angle, new_angle){
     }
 }
 
-static convert_steering_angle(angle){
-    if (angle < 0){
-        return 360 + angle
+static convert_steering_angle(delta, curr_angle){
+    const new_angle = curr_angle + delta
+    if (new_angle < 0){
+        return 360 + new_angle
+    }
+    else if (new_angle >= 360){
+        return new_angle - 360
     }
     else{
-        return angle
+        return new_angle
     }
 }
 

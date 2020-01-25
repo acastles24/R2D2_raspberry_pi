@@ -20,6 +20,10 @@ async function connect(scanner, R2D2) {
 async function main() {
     r2d2_connected = await connect(Scanner, R2D2);
     r2d2_functions = new r2d2Functions(r2d2_connected, Utils, Stance)
+    if (!r2d2_functions.r2d2_found){
+        console.log('Robot not found')
+        return
+    }
     await r2d2_functions.resetHeading()
     await r2d2_functions.set_stance(3)
 
@@ -44,8 +48,3 @@ async function main() {
 }
 
 main()
-
-// await r2d2_initialized.play_animation(3)
-// await r2d2_initialized.turn_dome_with_wait(45)
-// await r2d2_initialized.set_stance(3);
-// await r2d2_initialized.set_stance(2);
