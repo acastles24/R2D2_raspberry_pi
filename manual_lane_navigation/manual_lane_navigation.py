@@ -9,7 +9,7 @@ def detect_lanes(frame_raw):
 
     frame_edges = detect_edges(frame_blue_mask)
 
-    edges_cropped = crop_frame(frame_edges, 50, 50)
+    edges_cropped = crop_frame(frame_edges, 50)
 
     lines_detected = line_segments(edges_cropped)
 
@@ -24,8 +24,6 @@ def main():
         args = sys.stdin.readline()
         
         if args:
-            with open('/home/pi/R2D2_raspberry_pi/test.txt', 'a+') as file:
-                file.write(args+'\n')
             args_split = args.strip().split(' ')
             date_time = args_split[1]
             frame_num = args_split[2]

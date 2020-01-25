@@ -31,7 +31,7 @@ class ManualLaneNav{
 
 async start_lane_nav(){
     var date = ManualLaneNav.get_date()
-    this.r2d2_functions.resetHeading()
+    await this.r2d2_functions.resetHeading()
     var curr_steer_angle = 0
     var curr_steer_angle_converted = 0
     var frame_num = 1
@@ -54,6 +54,7 @@ async start_lane_nav(){
 
         if (frame_num > 1){
             let steering_stabilized = ManualLaneNav.stabilize_steering(curr_steer_angle, new_steering_angle)
+            let delta = steering_stabilized - curr_steer_angle
             console.log(steering_stabilized)
             var new_angle_converted = ManualLaneNav.convert_steering_angle(steering_stabilized, curr_steer_angle_converted)
 
@@ -87,7 +88,7 @@ static image_to_str(image){
 }
 
 static stabilize_steering(current_angle, new_angle){
-    let max_change = 90
+    let max_change = 5
     if (Math.abs(new_angle - current_angle) > max_change){
         if (new_angle > current_angle){
             return current_angle + max_change

@@ -9,14 +9,14 @@ def BGR_to_HSV(frame):
 
 
 def blue_mask(frame):
-    return cv2.inRange(frame, np.array([70, 0, 0], np.uint8), np.array([150, 255, 255], np.uint8))
+    return cv2.inRange(frame, np.array([0, 0, 0], np.uint8), np.array([120, 255, 255], np.uint8))
 
 
 def detect_edges(frame):
     return cv2.Canny(frame, 200, 400)
 
 
-def crop_frame(frame, pct_height, pct_width):
+def crop_frame(frame, pct_height):
     height, width = frame.shape
     mask = np.zeros_like(frame)
 
