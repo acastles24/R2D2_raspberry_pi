@@ -5,7 +5,7 @@ The encoded Bluetooth commands are sent by the Sphero V2 API.
 
 Current supported actions are manual roll in all directions with variable speed, turn dome and change stance (between tripod and bipod).
 
-App Launch Screen
+R2-D2 Robot
 
 ![Alt text](R2-D2_Robot.jpeg?raw=true "R2-D2 Robot")
 
