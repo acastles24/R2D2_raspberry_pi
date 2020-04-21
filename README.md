@@ -7,7 +7,7 @@ Current supported actions are manual roll in all directions with variable speed,
 
 App Launch Screen
 
-![Alt text](/Images/launch_screen.png?raw=true "Main Screen")
+![Alt text](R2-D2_Robot.jpeg?raw=true "R2-D2 Robot")
 
 [Manual Drive Demo Video](https://youtu.be/7wxGOOxmoIk "Manual Drive Demo Video")
 
