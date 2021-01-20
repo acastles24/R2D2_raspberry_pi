@@ -18,7 +18,7 @@ application.*
 
 ## Code
 
-### Establishes Connection
+### Establishes Connection To Robot
 Upon startup, the Raspberry Pi automatically establishes a Bluetooth connection with the robot motors. R2-D2's stance is then set to tripod; he's ready for action!
 
 ```javascript
